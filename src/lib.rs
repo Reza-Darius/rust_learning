@@ -3,6 +3,7 @@ mod stack;
 mod binarysearch;
 mod quicksort;
 mod queue;
+mod linkedlist;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

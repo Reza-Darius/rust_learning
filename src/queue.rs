@@ -5,10 +5,7 @@ struct queue_ll<'a> {
     cap: u32,
     len: u32,
 }
-struct Node<T> {
-    value: T,
-    next: Box<Node<T>>,
-}
+
 struct queue_arr {
     queue: Vec<u32>,
     cap: usize,
