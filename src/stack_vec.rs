@@ -13,12 +13,14 @@ impl Stack {
         self.arr.insert(self.ptr, value);
         self.ptr += 1;
     }
-    pub fn pop(&mut self) {
+    pub fn pop(&mut self) -> u32 {
+        let v = self.arr[self.ptr];
         self.arr[self.ptr] = 0;
         self.ptr -= 1;
+        v
     }
-    pub fn get(&self) -> u32 {
-        self.arr[self.ptr]
+    pub fn peek(&self) -> &u32 {
+        &self.arr[self.ptr]
     }
 }
 

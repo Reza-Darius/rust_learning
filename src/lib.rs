@@ -1,21 +1,13 @@
+#![allow(dead_code, unused_variables, unused_imports)]
+
 mod arrays;
-mod stack;
 mod binarysearch;
-mod quicksort;
-mod queue;
+mod btree_safe;
+mod btree_unsafe;
+mod lc;
 mod linkedlist;
-
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+mod memes;
+mod queue;
+mod quicksort;
+mod stack_vec;
+mod trie;
