@@ -5,21 +5,25 @@ fn qs<T: PartialOrd + Copy + std::fmt::Debug>(arr: &mut [T]) {
     let pivot = partition(arr);
 
     qs(&mut arr[..pivot]);
-    println!("first half: {:?}", arr);
     qs(&mut arr[pivot + 1..]);
-    println!("second half: {:?}", arr);
 }
 
 fn partition<T: PartialOrd + Copy + std::fmt::Debug>(arr: &mut [T]) -> usize {
+    if arr.is_empty() {
+        return 0;
+    }
+
     let hi = arr.len() - 1;
     let pivot = arr[hi]; // end point pivot
     let mut idx = 0;
-    for i in 0..hi {
-        if arr[i] <= pivot {
-            arr.swap(i, idx);
+
+    for j in 0..hi {
+        if arr[j] <= pivot {
+            arr.swap(j, idx);
             idx += 1;
         }
     }
+
     arr.swap(idx, hi);
     idx
 }
