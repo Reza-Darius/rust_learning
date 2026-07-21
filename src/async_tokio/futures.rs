@@ -1,4 +1,4 @@
-use std::{pin::pin, time::Duration};
+use std::{pin::pin, time::Duration, vec};
 
 #[tokio::main]
 async fn main() {
@@ -23,6 +23,28 @@ async fn main() {
             }
         }
     }
+}
+
+// this doesnt compile, because anonymous futures are distinct types
+// fn return_future() -> impl Future<Output = usize> {
+//     let condition = true;
+//     if condition {
+//         hello()
+//     } else {
+//         bye()
+//     }
+//
+// }
+
+// this doesnt work either
+// fn add_futures() {
+//     let mut v = vec![];
+//     v.push(bye());
+//     v.push(hello());
+// }
+
+async fn bye() -> usize {
+    42
 }
 
 async fn hello() -> usize {
