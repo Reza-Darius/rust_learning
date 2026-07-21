@@ -1,7 +1,8 @@
 [package]
-name = "dsa"
+name = "rust-learning"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0.104"
 rand = "0.9"

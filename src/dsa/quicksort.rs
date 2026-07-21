@@ -34,7 +34,7 @@ mod tests {
     use std::time::Instant;
 
     use super::*;
-    use crate::arrays::array_rand_get;
+    use crate::dsa::arrays::array_rand_get;
 
     #[test]
     fn quicksort() {

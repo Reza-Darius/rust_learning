@@ -53,7 +53,7 @@ struct TrieNode {
 
 #[cfg(test)]
 mod test {
-    use crate::trie::Trie;
+    use super::*;
 
     #[test]
     fn trie() {
