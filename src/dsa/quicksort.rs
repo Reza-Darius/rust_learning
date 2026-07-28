@@ -13,19 +13,49 @@ fn partition<T: PartialOrd + Copy + std::fmt::Debug>(arr: &mut [T]) -> usize {
         return 0;
     }
 
-    let hi = arr.len() - 1;
-    let pivot = arr[hi]; // end point pivot
+    let pivot_idx = median(arr);
+    let pivot = arr[pivot_idx]; 
+    let last = arr.len() - 1;
+
+    arr.swap(pivot_idx, last); // swap pivot to the end
+    
     let mut idx = 0;
 
-    for j in 0..hi {
+    // iterate all items except the pivot
+    for j in 0..last {
         if arr[j] <= pivot {
             arr.swap(j, idx);
             idx += 1;
         }
     }
 
-    arr.swap(idx, hi);
+    arr.swap(idx, last);
     idx
+}
+
+// calculates the median of three for the pivot, returns the idx
+fn median<T: PartialOrd>(arr: &[T]) -> usize {
+    let lo = 0;
+    let mid = arr.len() / 2;
+    let hi = arr.len() - 1;
+
+    if arr[lo] < arr[mid] {
+        if arr[mid] < arr[hi] {
+            mid
+        } else if arr[lo] < arr[hi] {
+            hi
+        } else {
+            lo
+        }
+    } else {
+        if arr[lo] < arr[hi] {
+            lo
+        } else if arr[mid] < arr[hi] {
+            hi
+        } else {
+            mid
+        }
+    }
 }
 
 #[cfg(test)]
@@ -34,13 +64,13 @@ mod tests {
     use std::time::Instant;
 
     use super::*;
-    use crate::dsa::arrays::array_rand_get;
+    use crate::dsa::arrays::rand_vec;
 
     #[test]
     fn quicksort() {
         let size = 10;
-        let mut arr1 = array_rand_get(size);
-        let mut arr2 = array_rand_get(size);
+        let mut arr1 = rand_vec(size);
+        let mut arr2 = arr1.clone();
 
         qs(&mut arr1[..]);
         arr2.sort();

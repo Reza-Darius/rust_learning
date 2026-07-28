@@ -1,12 +1,12 @@
 use rand::prelude::*;
 
 #[allow(dead_code)]
-pub(crate) fn array_rand_get(n: u32) -> Vec<u32> {
+pub(crate) fn rand_vec(n: u32) -> Vec<u32> {
     let mut array: Vec<u32> = (1..=n).collect();
     array.shuffle(&mut rand::rng());
     array
 }
-#[allow(dead_code)]
+
 fn linear_search(target: u32, array: &Vec<u32>) -> Option<u32> {
     for i in 0..array.len() {
         if array[i] == target {
@@ -38,7 +38,7 @@ mod tests {
 
     #[test]
     fn linearsearch() {
-        let array = array_rand_get(100000);
+        let array = rand_vec(100000);
         let target = rand::random_range(1..100) as u32;
 
         let now = Instant::now();
@@ -51,8 +51,8 @@ mod tests {
     }
     #[test]
     fn bubblesort() {
-        let mut arr = array_rand_get(100);
-        let mut arr2 = array_rand_get(100);
+        let mut arr = rand_vec(100);
+        let mut arr2 = rand_vec(100);
 
         bubble_sort(&mut arr);
         arr2.sort();

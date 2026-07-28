@@ -23,13 +23,13 @@ where
         let mut current = &mut self.root;
         while let Some(n) = current {
             match val.cmp(&n.elem) {
+                std::cmp::Ordering::Equal => return,
                 std::cmp::Ordering::Less => {
                     current = &mut current.as_mut().unwrap().left_child;
                 }
                 std::cmp::Ordering::Greater => {
                     current = &mut current.as_mut().unwrap().right_child;
                 }
-                std::cmp::Ordering::Equal => return,
             }
         }
         *current = Self::new_node(val);
@@ -78,9 +78,9 @@ where
     fn search_rec_helper(node: &Link<T>, val: &T) -> bool {
         if let Some(n) = node {
             match val.cmp(&n.elem) {
+                std::cmp::Ordering::Equal => true,
                 std::cmp::Ordering::Less => Self::search_rec_helper(&n.left_child, val),
                 std::cmp::Ordering::Greater => Self::search_rec_helper(&n.right_child, val),
-                std::cmp::Ordering::Equal => true,
             }
         } else {
             false
@@ -92,20 +92,23 @@ where
 
         while let Some(n) = current {
             match elem.cmp(&n.elem) {
+                std::cmp::Ordering::Equal => break,
                 std::cmp::Ordering::Less => {
                     current = &mut current.as_mut().unwrap().left_child;
                 }
                 std::cmp::Ordering::Greater => {
                     current = &mut current.as_mut().unwrap().right_child;
                 }
-                std::cmp::Ordering::Equal => break,
             }
         }
 
         let mut del_node = current.take()?;
         match (del_node.left_child.take(), del_node.right_child.take()) {
+            // no children, we just delete the node
             (None, None) => {}
+            // one child, we swap the child with the deleted node
             (Some(n), None) | (None, Some(n)) => *current = Some(n),
+            // two children, we have to find the successor
             (Some(l), Some(r)) => {
                 let mut right = Some(r);
                 let suc = Self::find_successor(&mut right).map(|mut node| {
@@ -121,7 +124,10 @@ where
         Some(del_node.elem)
     }
 
-    fn find_successor(p_node: &mut Link<T>) -> Link<T> {
+    // The successor node is the child node whose value is the least of all values that are greater than the deleted node
+    // which means, we look at the right node of the deleted node, then keep going left
+    // if the successor has a right child, we need to swap it with the successor before snatching it
+     fn find_successor(p_node: &mut Link<T>) -> Link<T> {
         let mut curr = p_node;
         while let Some(n) = curr
             && n.left_child.is_some()
