@@ -2,6 +2,7 @@ use std::mem::MaybeUninit;
 
 use anyhow::anyhow;
 
+/// a non-growable ring buffer
 #[derive(Debug)]
 pub struct Queue<T> {
     data: Vec<MaybeUninit<T>>,
@@ -13,7 +14,14 @@ pub struct Queue<T> {
     tail: usize,
 }
 
+impl<T> Default for Queue<T> {
+    fn default() -> Self {
+        Queue::new(256)
+    }
+}
+
 impl<T> Queue<T> {
+    /// panics if cap > u16::MAX
     pub fn new(cap: usize) -> Self {
         assert!(
             cap <= u16::MAX as usize,
@@ -73,7 +81,7 @@ impl<T> Queue<T> {
         }
 
         // SAFETY:
-        // tail always follows head so data is never uninitialized and
+        // tail always follows head so data is never uninitialized
         let elem = unsafe { self.data[i].assume_init_ref() };
 
         Some(elem)
@@ -231,6 +239,8 @@ mod tests {
         for _ in 0..10 {
             q.push(MyElement(String::from("hello")));
         }
+
+        assert_eq!(q.len(), 10);
         assert!(q.is_full());
         assert!(q.push(MyElement(String::from("hello"))).is_err());
 
@@ -254,11 +264,15 @@ mod tests {
             q.push(MyElement(String::from("hello")));
         }
 
+        assert_eq!(q.len(), 10);
+
         let mut clone = q.clone();
 
         for _ in 0..10 {
             assert!(clone.pop().is_some());
         }
+
+        assert_eq!(clone.len(), 0);
         assert!(clone.is_empty());
     }
 }

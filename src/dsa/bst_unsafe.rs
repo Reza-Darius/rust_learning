@@ -3,6 +3,7 @@ use std::ptr;
 struct BTree<T> {
     root: *mut Node<T>,
 }
+
 struct Node<T> {
     elem: T,
     parent: *mut Node<T>,
