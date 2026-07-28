@@ -1,7 +1,7 @@
 mod arrays;
 mod binarysearch;
-mod btree_safe;
-mod btree_unsafe;
+mod bst_safe;
+mod bst_unsafe;
 mod heap;
 mod lc;
 mod linkedlist;
