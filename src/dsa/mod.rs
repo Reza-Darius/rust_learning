@@ -6,7 +6,6 @@ mod btree;
 mod heap;
 mod lc;
 mod linkedlist;
-mod memes;
 mod quicksort;
 mod stack_vec;
 mod trie;

@@ -1,29 +1,5 @@
-use std::{pin::pin, time::Duration, vec};
-
-#[tokio::main]
-async fn main() {
-    // async fn always creates !Unpin anonymous futures
-    let mut f = pin!(hello());
-
-    // does not require pinning because MyFuture is Unpin
-    let mut my_f = MyFuture;
-
-    loop {
-        tokio::time::sleep(Duration::from_secs(1)).await;
-
-        tokio::select! {
-            // removing the &mut consumes the future and therefore doesnt compile with a loop
-            n = &mut my_f => {
-                println!("my future prints {n}")
-            }
-
-            // this causes a panic on second iteration because we run a completed async fn twice
-            n = &mut f => {
-                println!("{n}");
-            }
-        }
-    }
-}
+use futures::FutureExt;
+use std::{pin::pin, time::Duration};
 
 // this doesnt compile, because anonymous futures are distinct types
 // fn return_future() -> impl Future<Output = usize> {
@@ -61,5 +37,36 @@ impl Future for MyFuture {
         _: &mut std::task::Context<'_>,
     ) -> std::task::Poll<Self::Output> {
         std::task::Poll::Ready(42)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[tokio::test]
+    async fn futures() {
+        // async fn always creates !Unpin anonymous futures
+        let mut f = pin!(hello().fuse());
+
+        // does not require pinning because MyFuture is Unpin
+        let mut my_f = MyFuture;
+
+        loop {
+            tokio::time::sleep(Duration::from_secs(1)).await;
+
+            tokio::select! {
+                // removing the &mut consumes the future and therefore doesnt compile with a loop
+                n = &mut my_f => {
+                    println!("my future prints {n}")
+                }
+
+                // this causes a panic on second iteration because we run a completed async fn twice
+                // solution: fuse the future
+                n = &mut f => {
+                    println!("{n}");
+                }
+            }
+        }
     }
 }

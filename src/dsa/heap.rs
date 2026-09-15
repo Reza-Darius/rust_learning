@@ -66,20 +66,21 @@ where
 
     fn min_heapify(&mut self, idx: usize) {
         let heap_size = self.data.len();
-        let a = &self.data;
+        let arr = &self.data;
 
-        let l = left(idx);
-        let r = right(idx);
+        let li = left(idx);
+        let ri = right(idx);
         let mut smallest;
 
-        if l < heap_size && a[l] < a[idx] {
-            smallest = l;
+        // find smallest child and swap places until we cant find a smaller child
+        if li < heap_size && arr[li] < arr[idx] {
+            smallest = li;
         } else {
             smallest = idx;
         }
 
-        if r < heap_size && a[r] < a[smallest] {
-            smallest = r;
+        if ri < heap_size && arr[ri] < arr[smallest] {
+            smallest = ri;
         }
 
         if smallest != idx {
