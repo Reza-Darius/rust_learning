@@ -1,7 +1,6 @@
 mod arrays;
 mod binarysearch;
 mod bst_safe;
-mod bst_unsafe;
 mod btree;
 mod heap;
 mod lc;
@@ -9,4 +8,5 @@ mod linkedlist;
 mod quicksort;
 mod stack_vec;
 mod trie;
+mod queue;
 mod ringbuffer;

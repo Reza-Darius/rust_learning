@@ -1,7 +1,9 @@
 fn foo() {
-    let mut f = String::new();
-    let r = &mut f;
-    let b = &mut *r;
-
-    
+    let mut x = Box::new(42);
+    let mut z = &x;
+    for i in 0..100 {
+        println!("{}", z);
+        x = Box::new(i);
+        z = &x;
+    }
 }

@@ -1,12 +1,14 @@
+const N_LETTERS: usize = 26;
+
 struct Trie {
-    root: Vec<Option<TrieNode>>,
+    // root: Vec<Option<TrieNode>>,
+    root: Box<[Option<TrieNode>; N_LETTERS]>,
 }
 
 impl Trie {
     fn new() -> Self {
-        Trie {
-            root: (0..26).map(|_| None).collect(),
-        }
+        let a = std::array::from_fn(|_| None);
+        Trie { root: Box::new(a) }
     }
 
     fn insert(&mut self, str: &str) {
