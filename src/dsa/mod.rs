@@ -6,7 +6,6 @@ mod heap;
 mod lc;
 mod linkedlist;
 mod quicksort;
-mod stack_vec;
 mod trie;
 mod queue;
 mod ringbuffer;
