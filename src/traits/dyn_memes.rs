@@ -6,25 +6,25 @@ struct Bar;
 
 impl Foo for Bar {}
 
-fn need_foo_dyn(f: &dyn Foo) {}
-
-fn need_foo(f: &impl Foo) {}
+fn dyn_dispatch(f: &dyn Foo) {}
+fn static_dispatch<T: Foo + ?Sized>(f: &T) {}
 
 #[test]
 fn dyn_memes() {
     let bar = Bar;
     let dyn_foo: Box<dyn Foo> = Box::new(Bar);
 
-    need_foo(&bar);
+    static_dispatch(&bar);
     // concrete type can get coerced to dynamic trait object
-    need_foo_dyn(&bar);
+    dyn_dispatch(&bar);
 
-    need_foo_dyn(dyn_foo.as_ref());
-    need_foo_dyn(&*dyn_foo);
-    need_foo_dyn(dyn_foo.deref());
+    dyn_dispatch(dyn_foo.as_ref());
+    dyn_dispatch(&*dyn_foo);
+    dyn_dispatch(dyn_foo.deref());
 
-    // none of these work:
-    // need_foo(dyn_foo.as_ref());
-    // need_foo(&*dyn_foo);
-    // need_foo(dyn_foo.deref());
+    // because T: Trait has an implicit Sized bound
+    // we need to relax it
+    static_dispatch(dyn_foo.as_ref());
+    static_dispatch(&*dyn_foo);
+    static_dispatch(dyn_foo.deref());
 }
