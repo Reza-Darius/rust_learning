@@ -40,6 +40,33 @@ impl Future for MyFuture {
     }
 }
 
+// send memes
+
+trait MyTrait {
+    async fn hello(&self);
+}
+
+struct Foo;
+
+impl MyTrait for Foo {
+    async fn hello(&self) {}
+}
+
+async fn call_need_send() {
+    let f = Foo;
+    need_send(f);
+}
+
+// our type is send but the returning future of hello() might not be!
+fn need_send<F>(f: F)
+where
+    F: MyTrait + Send,
+{
+    let fut = f.hello();
+    // uncomment for compile error
+    // tokio::spawn(fut);
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
